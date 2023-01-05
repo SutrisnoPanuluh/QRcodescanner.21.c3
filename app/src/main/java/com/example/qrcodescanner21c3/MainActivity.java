@@ -3,6 +3,7 @@ package com.example.qrcodescanner21c3;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -56,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else if (Patterns.WEB_URL.matcher(result.getContents()).matches()) {
                 Intent visitUrl = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getContents()));
                 startActivity(visitUrl);
-            } else if (Patterns.PHONE.matcher(result.getContents()).matches()) {
+            }
+            else if (Patterns.PHONE.matcher(result.getContents()).matches()) {
                 String telp = String.valueOf(result.getContents());
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + telp));
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -67,8 +69,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, "no phone apk installed.", Toast.LENGTH_LONG);
                 }
             }
-                  else {
-                      try {
+            else {
+                try {
                     //konversi datanya ke json
                     JSONObject obj = new JSONObject(result.getContents());
                     //diset nilai
@@ -80,8 +82,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(this, result.getContents(),
                             Toast.LENGTH_LONG).show();
                 }
+            } }{
+            try {
+                String geoUri=result.getContents();
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
+                //Set Package
+                intent.setPackage("com.google.android.apps.maps");
+
+                //Set Flag
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                startActivity(intent);
+            }finally {
+
             }
-        }else{
+
+        }  {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
