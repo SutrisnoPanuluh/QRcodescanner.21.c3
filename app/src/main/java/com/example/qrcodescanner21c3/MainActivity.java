@@ -63,6 +63,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + telp));
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+            } else if (Patterns.EMAIL_ADDRESS.matcher(result.getContents()).matches()) {
+                Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse(result.getContents()));
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[] {"sutresfendik@gmail.com"});
+                intent.putExtra(Intent.EXTRA_CC, new String[] {"dimasgustiwijaya93@gmail.com"});
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Fungsi Email");
+                intent.putExtra(Intent.EXTRA_TEXT, "Sutrisno-TI.21.C.3-312110385");
+                startActivity(intent);
+
                 try {
                     startActivity(Intent.createChooser(intent, "waiting.."));
                 } catch (android.content.ActivityNotFoundException ex) {
