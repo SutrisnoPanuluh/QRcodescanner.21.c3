@@ -57,21 +57,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else if (Patterns.WEB_URL.matcher(result.getContents()).matches()) {
                 Intent visitUrl = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getContents()));
                 startActivity(visitUrl);
+
+            } else if (Patterns.EMAIL_ADDRESS.matcher(result.getContents()).matches()) {
+                Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse(result.getContents()));
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"raihanadzuhri1@gmail.com"});
+                intent.putExtra(Intent.EXTRA_CC, new String[]{"raihancahbekasi1@gmail.com"});
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Fungsi Email");
+                intent.putExtra(Intent.EXTRA_TEXT, "Raihan Adzuhri-TI.21.C.3-312110374");
+                try {
+                    startActivity(Intent.createChooser(intent, "Ingin Mengirim Email ?"));
+                } catch (android.content.ActivityNotFoundException ex) {
+                }
+            }else if (Patterns.WEB_URL.matcher(result.getContents()).matches()){
+                String geoUri=result.getContents();
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
+                //Set Package
+                intent.setPackage("com.google.android.apps.maps");
+
+                //Set Flag
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                startActivity(intent);
             }
             else if (Patterns.PHONE.matcher(result.getContents()).matches()) {
                 String telp = String.valueOf(result.getContents());
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + telp));
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-            } else if (Patterns.EMAIL_ADDRESS.matcher(result.getContents()).matches()) {
-                Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse(result.getContents()));
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[] {"sutresfendik@gmail.com"});
-                intent.putExtra(Intent.EXTRA_CC, new String[] {"dimasgustiwijaya93@gmail.com"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Fungsi Email");
-                intent.putExtra(Intent.EXTRA_TEXT, "Sutrisno-TI.21.C.3-312110385");
-                startActivity(intent);
-
                 try {
                     startActivity(Intent.createChooser(intent, "waiting.."));
                 } catch (android.content.ActivityNotFoundException ex) {
@@ -91,22 +104,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(this, result.getContents(),
                             Toast.LENGTH_LONG).show();
                 }
-            } }{
-            try {
-                String geoUri=result.getContents();
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
-                //Set Package
-                intent.setPackage("com.google.android.apps.maps");
+            } }
 
-                //Set Flag
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                startActivity(intent);
-            }finally {
-
-            }
-
-        }  {
+        else{
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
